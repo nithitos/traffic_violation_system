@@ -2,7 +2,6 @@
 Zero-Dependency Multi-Threaded Web & REST API Server
 Integrates Python Modules 1-4 with a modern browser frontend.
 """
-import cgi
 import json
 import mimetypes
 import os
