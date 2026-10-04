@@ -1,0 +1,6 @@
+EVIDENCE REPORT: VIO-20260915-0F6AAA
+Offense: Red Signal Violation
+Vehicle: TN-07-AB-1234 (Car)
+Speed: 64.0 km/h (Limit: 50.0 km/h)
+Location: Anna Salai Junction [Camera: CAM-CHN-01]
+Signal: RED | Timestamp: 2026-09-15 20:57:56

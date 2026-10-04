@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Traffic Enforcement & Alert System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+            70% { transform: scale(1); box-shadow: 0 0 0 14px rgba(16,185,129,0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+        }
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-10px); }
+        }
+        @keyframes scan-line {
+            0%   { top: 0%; opacity: 0.7; }
+            50%  { opacity: 0.3; }
+            100% { top: 100%; opacity: 0.7; }
+        }
+        .animate-fade-up  { animation: fade-up 0.6s ease both; }
+        .animate-float    { animation: float 3.5s ease-in-out infinite; }
+        .pulse-ring       { animation: pulse-ring 2s infinite; }
+        .scan-line        { position: absolute; left: 0; width: 100%; height: 2px;
+                            background: linear-gradient(90deg, transparent, #10b981, transparent);
+                            animation: scan-line 2.5s linear infinite; }
+        .glass {
+            background: rgba(15,23,42,0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .input-field {
+            background: rgba(30,41,59,0.8);
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+        }
+        .input-field::placeholder { color: #475569; }
+        .btn-login {
+            background: linear-gradient(135deg, #10b981, #059669);
+            transition: all 0.2s;
+        }
+        .btn-login:hover:not(:disabled) {
+            background: linear-gradient(135deg, #059669, #047857);
+            box-shadow: 0 8px 24px rgba(16,185,129,0.35);
+            transform: translateY(-1px);
+        }
+        .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* Animated traffic-grid background */
+        body { background-color: #020617; }
+        .bg-grid {
+            position: fixed; inset: 0; z-index: 0; overflow: hidden;
+            background-image:
+                linear-gradient(rgba(16,185,129,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16,185,129,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .bg-glow-left {
+            position: fixed; top: -120px; left: -160px; width: 520px; height: 520px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%);
+            pointer-events: none; z-index: 0;
+        }
+        .bg-glow-right {
+            position: fixed; bottom: -140px; right: -140px; width: 480px; height: 480px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%);
+            pointer-events: none; z-index: 0;
+        }
+        .role-card {
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1.5px solid #334155;
+        }
+        .role-card:hover  { border-color: #10b981; background: rgba(16,185,129,0.07); }
+        .role-card.active { border-color: #10b981; background: rgba(16,185,129,0.12); }
+        .role-card.active .role-dot { background: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,0.25); }
+        .role-dot { width: 9px; height: 9px; border-radius: 50%; background: #475569; transition: all 0.2s; }
+        .shake { animation: shake 0.4s ease; }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20%      { transform: translateX(-8px); }
+            40%      { transform: translateX(8px); }
+            60%      { transform: translateX(-5px); }
+            80%      { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center relative">
+
+    <!-- Animated background -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow-left"></div>
+    <div class="bg-glow-right"></div>
+
+    <!-- Moving particles (JS drawn below) -->
+    <canvas id="particleCanvas" class="fixed inset-0 z-0 pointer-events-none opacity-40"></canvas>
+
+    <!-- ===== MAIN CARD ===== -->
+    <div class="relative z-10 w-full max-w-md px-4 py-8 animate-fade-up">
+
+        <!-- Header Branding -->
+        <div class="text-center mb-8">
+            <!-- Animated Shield Icon -->
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 mb-5 pulse-ring animate-float relative overflow-hidden">
+                <i class="fa-solid fa-traffic-light text-emerald-400 text-3xl"></i>
+                <div class="scan-line"></div>
+            </div>
+
+            <h1 class="text-2xl font-extrabold text-white tracking-tight mb-1">
+                TRAFFIC ENFORCEMENT
+            </h1>
+            <p class="text-sm font-semibold text-emerald-400 tracking-widest uppercase mb-1">
+                & Alert System
+            </p>
+            <p class="text-xs text-slate-500">
+                Intelligent Real-Time Violation Detection &amp; Automated E-Challan Portal
+            </p>
+        </div>
+
+        <!-- GLASS CARD -->
+        <div class="glass rounded-2xl border border-slate-700/80 shadow-2xl p-8">
+
+            <!-- Role Selector Pills -->
+            <div class="mb-6">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">
+                    <i class="fa-solid fa-user-shield text-emerald-400 mr-1.5"></i>Select Your Access Role
+                </p>
+                <div class="grid grid-cols-3 gap-2" id="rolePills">
+                    <div class="role-card active rounded-xl p-2.5 text-center" onclick="selectRole(this,'ADMIN','admin','admin123')">
+                        <div class="flex justify-center mb-1.5">
+                            <span class="role-dot"></span>
+                        </div>
+                        <i class="fa-solid fa-crown text-amber-400 text-sm mb-1 block"></i>
+                        <span class="text-[10px] font-bold text-slate-200 block">Admin</span>
+                    </div>
+                    <div class="role-card rounded-xl p-2.5 text-center" onclick="selectRole(this,'TRAFFIC_OFFICER','officer1','officer123')">
+                        <div class="flex justify-center mb-1.5">
+                            <span class="role-dot"></span>
+                        </div>
+                        <i class="fa-solid fa-shield-halved text-blue-400 text-sm mb-1 block"></i>
+                        <span class="text-[10px] font-bold text-slate-200 block">Officer</span>
+                    </div>
+                    <div class="role-card rounded-xl p-2.5 text-center" onclick="selectRole(this,'CONTROL_ROOM_OPERATOR','operator1','operator123')">
+                        <div class="flex justify-center mb-1.5">
+                            <span class="role-dot"></span>
+                        </div>
+                        <i class="fa-solid fa-tower-broadcast text-purple-400 text-sm mb-1 block"></i>
+                        <span class="text-[10px] font-bold text-slate-200 block">Operator</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-700/60 mb-6"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <!-- Username -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                        <i class="fa-solid fa-user text-emerald-500 mr-1"></i>Username
+                    </label>
+                    <div class="relative">
+                        <input
+                            type="text"
+                            id="username"
+                            class="input-field w-full rounded-xl px-4 py-3 text-sm pl-10"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required
+                        />
+                        <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                        <i class="fa-solid fa-lock text-emerald-500 mr-1"></i>Password
+                    </label>
+                    <div class="relative">
+                        <input
+                            type="password"
+                            id="password"
+                            class="input-field w-full rounded-xl px-4 py-3 text-sm pl-10 pr-10"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        />
+                        <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                        <button type="button" onclick="togglePassword()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-xs transition">
+                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error Banner -->
+                <div id="errorBanner" class="hidden bg-rose-950/70 border border-rose-700/60 rounded-xl px-4 py-3 text-xs text-rose-300 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation text-rose-400 flex-shrink-0"></i>
+                    <span id="errorText">Invalid credentials.</span>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" id="loginBtn" class="btn-login w-full text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 mt-2 shadow-lg">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    <span id="loginBtnText">Sign In to Control Center</span>
+                </button>
+            </form>
+
+            <!-- Demo Credentials Hint -->
+            <div class="mt-5 p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/50">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-info text-slate-600"></i> Demo Credentials
+                </p>
+                <div class="space-y-1 text-[11px] font-mono text-slate-400">
+                    <div class="flex justify-between"><span class="text-amber-400">admin</span><span>admin123</span></div>
+                    <div class="flex justify-between"><span class="text-blue-400">officer1</span><span>officer123</span></div>
+                    <div class="flex justify-between"><span class="text-purple-400">operator1</span><span>operator123</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <p class="text-center text-[10px] text-slate-600 mt-6">
+            <i class="fa-solid fa-shield-halved mr-1"></i>
+            Secure Access · Traffic Enforcement Department · Chennai, Tamil Nadu
+        </p>
+    </div>
+
+    <script>
+        // ===== Role Pre-fill Logic =====
+        function selectRole(el, role, user, pwd) {
+            document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('username').value = user;
+            document.getElementById('password').value = pwd;
+            hideError();
+        }
+
+        // ===== Password Toggle =====
+        function togglePassword() {
+            const inp = document.getElementById('password');
+            const icon = document.getElementById('eyeIcon');
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash';
+            } else {
+                inp.type = 'password';
+                icon.className = 'fa-solid fa-eye';
+            }
+        }
+
+        // ===== Error helpers =====
+        function showError(msg) {
+            const b = document.getElementById('errorBanner');
+            document.getElementById('errorText').textContent = msg;
+            b.classList.remove('hidden');
+            document.getElementById('loginForm').classList.add('shake');
+            setTimeout(() => document.getElementById('loginForm').classList.remove('shake'), 450);
+        }
+        function hideError() {
+            document.getElementById('errorBanner').classList.add('hidden');
+        }
+
+        // ===== Login Handler =====
+        async function handleLogin(e) {
+            e.preventDefault();
+            hideError();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const btn      = document.getElementById('loginBtn');
+            const btnText  = document.getElementById('loginBtnText');
+
+            if (!username || !password) {
+                showError('Please enter both username and password.');
+                return;
+            }
+
+            // Loading state
+            btn.disabled = true;
+            btnText.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i> Authenticating...';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    // Save session to sessionStorage
+                    sessionStorage.setItem('tvas_session', JSON.stringify(data.session));
+                    btnText.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Access Granted – Redirecting...';
+                    btn.style.background = 'linear-gradient(135deg,#059669,#047857)';
+                    setTimeout(() => { window.location.href = '/'; }, 900);
+                } else {
+                    showError(data.error || 'Invalid username or password.');
+                    btn.disabled = false;
+                    btnText.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Sign In to Control Center';
+                }
+            } catch (err) {
+                showError('Cannot reach server. Make sure the web server is running.');
+                btn.disabled = false;
+                btnText.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Sign In to Control Center';
+            }
+        }
+
+        // ===== Particle Canvas =====
+        (function() {
+            const canvas = document.getElementById('particleCanvas');
+            const ctx    = canvas.getContext('2d');
+            let particles = [];
+
+            function resize() {
+                canvas.width  = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            for (let i = 0; i < 55; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1.6 + 0.4,
+                    dx: (Math.random() - 0.5) * 0.4,
+                    dy: (Math.random() - 0.5) * 0.4,
+                    alpha: Math.random() * 0.5 + 0.15,
+                    color: Math.random() > 0.5 ? '16,185,129' : '59,130,246'
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
+                    ctx.fill();
+                    p.x += p.dx;
+                    p.y += p.dy;
+                    if (p.x < 0 || p.x > canvas.width)  p.dx *= -1;
+                    if (p.y < 0 || p.y > canvas.height)  p.dy *= -1;
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+
+        // Pre-fill admin on load (first role card is active by default)
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('username').value = 'admin';
+            document.getElementById('password').value = 'admin123';
+        });
+    </script>
+</body>
+</html>

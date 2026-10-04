@@ -1,0 +1,2 @@
+challan_id,violation_id,vehicle_number,driver_id,amount,issue_date,due_date,payment_status,payment_date,payment_reference
+ECH-20260915-3C3EEC,VIO-20260915-0F6AAA,TN-07-AB-1234,DRV-1001,1000.0,2026-09-15 20:57:56,2026-09-30,PAID,2026-09-15 20:57:56,UPI-TEST-998877

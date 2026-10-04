@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Challan Receipt - ECH-20260915-3C3EEC</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 30px;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+        }
+        .receipt-card {
+            max-width: 760px;
+            margin: auto;
+            background: #ffffff;
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #2f3640;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #2f3640;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .header h3 {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #718093;
+            font-weight: 500;
+        }
+        .badge-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            background-color: #2ed573;
+            color: white;
+            float: right;
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2f3640;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #f1f2f6;
+            padding-bottom: 4px;
+        }
+        table.info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        table.info-table td {
+            padding: 8px;
+            border-bottom: 1px solid #f1f2f6;
+        }
+        table.info-table td.label {
+            font-weight: 600;
+            color: #718093;
+            width: 35%;
+        }
+        table.info-table td.val {
+            color: #2f3640;
+            font-weight: 500;
+        }
+        .fine-total-box {
+            background-color: #f1f2f6;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: right;
+            margin: 20px 0;
+        }
+        .fine-total-box .amount {
+            font-size: 26px;
+            font-weight: bold;
+            color: #c0392b;
+        }
+        .evidence-box {
+            text-align: center;
+            margin: 20px 0;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #a4b0be;
+            margin-top: 25px;
+            border-top: 1px solid #f1f2f6;
+            padding-top: 10px;
+        }
+        @media print {
+            body { background-color: #fff; margin: 0; }
+            .receipt-card { box-shadow: none; border: none; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-card">
+        <div class="header">
+            <span class="badge-status">PAID</span>
+            <h1>Traffic Enforcement Department</h1>
+            <h3>Official Electronic Traffic Violation Notice (E-Challan)</h3>
+        </div>
+
+        <div class="section-title">Notice & Offender Details</div>
+        <table class="info-table">
+            <tr>
+                <td class="label">Challan Number:</td>
+                <td class="val"><strong>ECH-20260915-3C3EEC</strong></td>
+            </tr>
+            <tr>
+                <td class="label">Violation Reference ID:</td>
+                <td class="val">VIO-20260915-0F6AAA</td>
+            </tr>
+            <tr>
+                <td class="label">Vehicle Registration No:</td>
+                <td class="val"><strong>TN-07-AB-1234</strong> (Hyundai Creta)</td>
+            </tr>
+            <tr>
+                <td class="label">Registered Owner / Driver:</td>
+                <td class="val">Anand Venkataraman (License: DL-0420110012345)</td>
+            </tr>
+            <tr>
+                <td class="label">Contact Phone:</td>
+                <td class="val">+919840123456</td>
+            </tr>
+        </table>
+
+        <div class="section-title">Violation Details & Location</div>
+        <table class="info-table">
+            <tr>
+                <td class="label">Offense Committed:</td>
+                <td class="val"><strong style="color: #c0392b;">RED SIGNAL</strong></td>
+            </tr>
+            <tr>
+                <td class="label">Location / Junction:</td>
+                <td class="val">Anna Salai Junction</td>
+            </tr>
+            <tr>
+                <td class="label">Detected Speed:</td>
+                <td class="val">64.0 km/h (Permitted Limit: 50.0 km/h)</td>
+            </tr>
+            <tr>
+                <td class="label">Date & Time of Offense:</td>
+                <td class="val">2026-09-15 20:57:56</td>
+            </tr>
+            <tr>
+                <td class="label">Payment Due Date:</td>
+                <td class="val"><strong>2026-09-30</strong></td>
+            </tr>
+        </table>
+
+        <div class="fine-total-box">
+            <div style="font-size: 13px; color: #718093; text-transform: uppercase;">Total Penalty Payable</div>
+            <div class="amount">INR 1,000.00</div>
+        </div>
+
+        <div class="section-title">Photographic Evidence</div>
+        <div class="evidence-box">
+            <img src="file:///C:/Users/HEMAVARSHINI S/.gemini/antigravity/scratch/traffic_violation_system/evidence/violation_VIO-20260915-0F6AAA.txt" style="max-width: 100%; height: auto; border: 2px solid #333; border-radius: 4px;" alt="Violation Evidence" />
+        </div>
+
+        <div class="footer">
+            Generated by Traffic Violation and Accident Alert Intelligent System. For inquiries or online settlement, visit the Traffic Police Portal.
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,3 @@
+CAM: CAM-TEST-01 | Junction: Silk Board Junction
+Signal: RED | Time: 2026-09-15 20:40:51
+Detected: KA-01-EF-9012 (Car) at 47.8 km/h

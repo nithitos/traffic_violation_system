@@ -1,0 +1,6 @@
+EVIDENCE REPORT: VIO-20260915-A34BA7
+Offense: Wrong Side Driving
+Vehicle: GJ-01-GH-3456 (Truck)
+Speed: 35.0 km/h (Limit: 50.0 km/h)
+Location: Anna Salai - Gemini Flyover [Camera: CAM-CHN-01]
+Signal: GREEN | Timestamp: 2026-09-15 21:04:57

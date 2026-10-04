@@ -1,0 +1,6 @@
+EVIDENCE REPORT: VIO-20260928-B6BEE9
+Offense: Speed Limit Violation
+Vehicle: TN-07-AB-1234 (Car)
+Speed: 52.0 km/h (Limit: 50.0 km/h)
+Location: Anna Salai - Gemini Flyover Junction [Camera: CAM-CHN-01]
+Signal: RED | Timestamp: 2026-09-28 20:29:35

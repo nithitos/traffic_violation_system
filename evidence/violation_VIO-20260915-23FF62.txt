@@ -1,0 +1,6 @@
+EVIDENCE REPORT: VIO-20260915-23FF62
+Offense: Speed Limit Violation
+Vehicle: KA-01-EF-9012 (Car)
+Speed: 85.0 km/h (Limit: 50.0 km/h)
+Location: Anna Salai - Gemini Flyover [Camera: CAM-CHN-01]
+Signal: GREEN | Timestamp: 2026-09-15 20:51:53

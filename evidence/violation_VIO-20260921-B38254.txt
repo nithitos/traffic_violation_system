@@ -1,0 +1,6 @@
+EVIDENCE REPORT: VIO-20260921-B38254
+Offense: Driving Without Seatbelt
+Vehicle: TN-07-AB-1234 (Car)
+Speed: 42.0 km/h (Limit: 40.0 km/h)
+Location: Adyar Signal - LB Road Crossing [Camera: CAM-CHN-03]
+Signal: GREEN | Timestamp: 2026-09-21 12:08:54

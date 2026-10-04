@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+ENV/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test/runtime artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local generated data
+*.log
+
+# Keep the sample database/video and committed demo evidence in Git.
+# If production data becomes large, move DB/evidence/reports to Railway Volume/object storage.

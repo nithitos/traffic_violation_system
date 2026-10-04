@@ -1,0 +1,6 @@
+EVIDENCE REPORT: VIO-20260915-11BC82
+Offense: Illegal Parking Violation
+Vehicle: TN-22-JK-7890 (Auto Rickshaw)
+Speed: 0.0 km/h (Limit: 50.0 km/h)
+Location: Panagal Park Commercial Zone [Camera: CAM-CHN-05]
+Signal: GREEN | Timestamp: 2026-09-15 20:51:53
